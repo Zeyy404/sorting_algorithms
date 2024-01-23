@@ -1,6 +1,41 @@
 #include "sort.h"
 
 /**
+ * lomuto_partition - partitions the array using Lomuto scheme
+ * and returns the partition index
+ * @array: the array of integers to be sorted
+ * @low: the low index of the current partition
+ * @high: the high index of the current partition
+ *
+ * Return: the partition index
+ */
+int lomuto_partition(int *array, int low, int high)
+{
+	int pivot = array[high];
+	int i = low, j;
+	int temp;
+
+	for (j = low; j < high; j++)
+	{
+		if (array[j] < pivot)
+		{
+
+			temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+
+			i++;
+		}
+	}
+
+	temp = array[i];
+	array[i] = array[high];
+	array[high] = temp;
+
+	return (i);
+}
+
+/**
  * quicksort - recursive function for quick sort
  * @array: the array of integers to be sorted
  * @low: the low index of the current partition
@@ -10,32 +45,13 @@
  */
 void quicksort(int *array, int low, int high, size_t size)
 {
-	int pivot, i, j, temp, pi;
+	int pi;
+
 	if (low < high)
 	{
-		pivot = array[high];
-		i = low - 1;
-
-		for (j = low; j < high; j++)
-		{
-			if (array[j] < pivot)
-			{
-				i++;
-
-				temp = array[i];
-				array[i] = array[j];
-				array[j] = temp;
-
-			}
-		}
-
-		temp = array[i + 1];
-		array[i + 1] = array[high];
-		array[high] = temp;
+		pi = lomuto_partition(array, low, high);
 
 		print_array(array, size);
-
-		pi = i + 1;
 
 		quicksort(array, low, pi - 1, size);
 		quicksort(array, pi + 1, high, size);
