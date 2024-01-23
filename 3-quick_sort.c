@@ -6,10 +6,10 @@
  * @array: the array of integers to be sorted
  * @low: the low index of the current partition
  * @high: the high index of the current partition
- *
+ * @size: the size of the array
  * Return: the partition index
  */
-int lomuto_partition(int *array, int low, int high)
+int lomuto_partition(int *array, int low, int high, size_t size)
 {
 	int pivot = array[high];
 	int i = low, j;
@@ -20,17 +20,25 @@ int lomuto_partition(int *array, int low, int high)
 		if (array[j] < pivot)
 		{
 
-			temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
+			if (i != j)
+			{
+				temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+				print_array(array, size);
+			}
 
 			i++;
 		}
 	}
 
-	temp = array[i];
-	array[i] = array[high];
-	array[high] = temp;
+	if (array[i] != array[high])
+	{
+		temp = array[i];
+		array[i] = array[high];
+		array[high] = temp;
+		print_array(array, size);
+	}
 
 	return (i);
 }
@@ -49,9 +57,7 @@ void quicksort(int *array, int low, int high, size_t size)
 
 	if (low < high)
 	{
-		pi = lomuto_partition(array, low, high);
-
-		print_array(array, size);
+		pi = lomuto_partition(array, low, high, size);
 
 		quicksort(array, low, pi - 1, size);
 		quicksort(array, pi + 1, high, size);
